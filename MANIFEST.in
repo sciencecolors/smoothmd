@@ -1,0 +1,6 @@
+include LICENSE
+include MANIFEST.in
+include AUTHORS.md README.md
+
+graft smoothmd
+global-exclude *.py[cod] __pycache__ *.so
