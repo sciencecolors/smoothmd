@@ -20,9 +20,11 @@ readme = "README.md"
 requires-python = ">=3.9"
 dependencies = [
     "MDAnalysis>=2.0.0",
+    "networkx",
+    "numpy",
 ]
 keywords = [
-    "molecular simulations",
+    "SN_NeRF coordinates molecular simulations",
 ]
 dynamic = [
     "version",
