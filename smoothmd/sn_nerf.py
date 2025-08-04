@@ -61,11 +61,23 @@ def place_atom(pos_a, pos_b, pos_c, length, theta, phi):
     """
     # Base vectors AB and BC
     ab = (pos_b - pos_a)
-    bc_unit = (pos_c - pos_b) / np.linalg.norm(pos_c - pos_b)
+    bc_norm = np.linalg.norm(pos_c - pos_b)
+
+    # Handle degenerate case where B and C are the same point
+    if bc_norm < 1e-10:
+        raise ValueError("Atoms B and C are too close together (distance < 1e-10)")
+
+    bc_unit = (pos_c - pos_b) / bc_norm
 
     # Normals n = AB x BC, p = n x BC
     n_unit = np.cross(ab, bc_unit)
-    n_unit = n_unit / np.linalg.norm(n_unit)
+    n_norm = np.linalg.norm(n_unit)
+
+    # Handle degenerate case where A, B, C are collinear
+    if n_norm < 1e-10:
+        raise ValueError("Atoms A, B, C are collinear - cannot define reference frame")
+
+    n_unit = n_unit / n_norm
     p_unit = np.cross(n_unit, bc_unit)
 
     # Rotation matrix [BC; p;  n]

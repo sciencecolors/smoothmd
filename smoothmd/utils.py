@@ -91,7 +91,7 @@ def extract_descriptors(mol_graph, initial_cartesian):
 
 
     cartesian_indices = np.concatenate((np.where(~resolved)[0], initial_cartesian))
-    return np.array(descriptors, dtype=np.int64), cartesian_indices
+    return np.array(descriptors, dtype=np.int64), cartesian_indices.astype(np.int64)
 
 
 def compute_angle(out, pos_a, pos_b, pos_c):
@@ -162,7 +162,7 @@ def compute_dihedral(out, pos_a, pos_b, pos_c, pos_d):
 
     # Return the dihedral angle as components for numerical stability
     # The sign is determined by the scalar triple product
-    vec_bc_u = vec_bc / np.linalg.norm(vec_bc, axis=1)[non_zero, None]
+    vec_bc_u = vec_bc[non_zero] / np.linalg.norm(vec_bc[non_zero], axis=1)[:, None]
 
     out[:] = 0.0
     # Sine component
