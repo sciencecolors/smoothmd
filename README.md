@@ -34,13 +34,6 @@ To build the package from source, run:
 pip install .
 ```
 
-If you want to create a development environment, install
-the dependencies required for tests and docs with:
-
-```
-pip install ".[test]"
-```
-
 ## Usage
 
 ### Basic Example
@@ -53,9 +46,10 @@ from smoothmd import filter_smooth_trajectory
 universe = mda.Universe("topology.tpr", "trajectory.xtc")
 
 # Select backbone atoms to be smoothed in Cartesian coordinates for better
-# stability (recommended for polymers), except for prolines
-# At least three atoms must be selected for each molecule in the system
-cartesian_indices = universe.select_atoms("backbone and not resname PRO").ids
+# stability (recommended for polymers)
+# At least three atoms must be selected for each molecule in the system,
+# otherwise all atoms will be smoothed in cartesian coordinates
+cartesian_indices = universe.select_atoms("backbone").ids
 
 # Apply smoothing filter
 filter_smooth_trajectory(
@@ -97,7 +91,7 @@ filter_smooth_trajectory(
 
 ### Performance Tips
 
-1. **Backbone Selection**: For proteins, filtering backbone atoms except for prolines in cartesian coordinates (`"backbone and not resname PRO"`) provides better results.
+1. **Backbone Selection**: For proteins, filtering backbone atoms in cartesian coordinates (`"backbone"` MDAnalysis selection) provides better results.
 2. **Filter Window**: Value for `period` should be the period of the movements to be filtered in frames.
 3. **Frame Skipping**: Use `skip_frames > 1` to reduce output trajectory size while maintaining smoothing quality.
 4. **Memory Usage**: The algorithms use a streaming approach, so no additional memory is needed to store trajectories besides the one already allocated bu the `MDAnalysis.Universe`.
